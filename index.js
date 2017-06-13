@@ -39,7 +39,7 @@ app.get('/search',function (req, res, next) {
 app.get('/restaurant/:id', function (req, res, next) {
     let id = req.params.id;
     var query =
-        `SELECT 
+        `SELECT
             restaurant.id,
             restaurant.name as restaurant_name,
             restaurant.address,
@@ -48,17 +48,17 @@ app.get('/restaurant/:id', function (req, res, next) {
             review.title,
             review.stars,
             review.review
-        FROM 
-            restaurant 
-        LEFT OUTER JOIN 
-            review 
-        ON 
+        FROM
+            restaurant
+        LEFT OUTER JOIN
+            review
+        ON
             review.restaurant_id = restaurant.id
-        LEFT OUTER JOIN 
-            reviewer 
-        ON 
+        LEFT OUTER JOIN
+            reviewer
+        ON
             review.reviewer_id = reviewer.id
-        WHERE 
+        WHERE
             restaurant.id = $1`
     ;
     console.log(query);
@@ -113,6 +113,6 @@ app.post('/restaurant/submit_new', function (req, res, next) {
 
 
 
-app.listen(8000, function () {
-    console.log('live on 8000, go head shawty');
+app.listen(9000, function () {
+    console.log('live on 9000, go head shawty');
 });
