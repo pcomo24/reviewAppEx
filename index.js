@@ -7,7 +7,7 @@ var pgp = require('pg-promise')({
     promiseLib: promise
 });
 //start new database object
-var db = pgp({database: 'restaurant_v2'});
+var db = pgp({database: 'restaurant_v2', user: postgres});
 //middleware
 app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: false }));
