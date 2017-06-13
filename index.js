@@ -13,11 +13,13 @@ app.set('view engine', 'hbs');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/public', express.static('public'));
 
-//urls
+//URLS AND VIEWS
+//homepage
 app.get('/', function (req, res) {
     res.render('homepage.hbs')
 });
 
+//query DB for restaurants
 app.get('/search',function (req, res, next) {
     //query.searchTerm name matches name on form from homepage.hbs
     var search = req.query.searchTerm;
@@ -32,6 +34,8 @@ app.get('/search',function (req, res, next) {
         })
         .catch(next);
 });
+
+//get restaurant info and reviews
 app.get('/restaurant/:id', function (req, res, next) {
     let id = req.params.id;
     var query =
@@ -82,9 +86,29 @@ app.post('/add_review/:id', function (req, res, next) {
     var reviewInfo = 'INSERT INTO review VALUES (default, NULL, $1, $2, $3, $4)';
     db.result(reviewInfo, [stars, title, review, id])
         .then(function () {
-            res.redirect('/')
+            res.redirect('/restaurant/${id}')
         })
     .catch(next)
+});
+
+//restaurant form page
+app.get('/rest/new', function (req, res) {
+    res.render('restaurant_form.hbs')
+});
+
+//info posted from restaurant form
+app.post('/restaurant/submit_new', function (req, res, next) {
+    var resName = req.body.resName;
+    var resAddress = req.body.resAddress;
+    var resCat = req.body.resCat;
+    var resInfo = 'INSERT INTO restaurant VALUES (default, $1, $2, $3) RETURNING restaurant.id';
+
+    db.result(resInfo, [resName, resAddress, resCat])
+        .then(function (results) {
+            console.log('row id: ' + results);
+            res.redirect('/');
+        })
+        .catch(next);
 });
 
 
